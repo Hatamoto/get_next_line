@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:29:16 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/17 16:30:16 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/17 18:41:42 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 
 #include <unistd.h>
 
-char *get_next_line(int fd);
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE = 64
+#endif
+
+char	*get_next_line(int fd);
+int		check_line_end(char *buf);
 
 #endif
