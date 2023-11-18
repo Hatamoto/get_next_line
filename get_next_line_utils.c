@@ -6,30 +6,44 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/17 22:23:04 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/18 20:20:29 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*realloc_line(char *line)
+size_t	ft_strlen(const char *str)
+{
+	size_t	length;
+
+	length = 0;
+	while (str[length])
+		length++;
+	return (length);
+}
+
+char	*realloc_line(char *line, int rlen)
 {
 	char	*newline;
 	int		i;
 
+	i = 0;
 	if (line == NULL)
 		newline = malloc(BUFFER_SIZE);
-	else 
-		newline = malloc(ft_strlen(line) + BUFFER_SIZE)
-	
-	while (line[i])
-	{
-		newline[i] = line[i]
-		i++
+	else
+	{	
+		newline = malloc(rlen + BUFFER_SIZE + 1);
+		while (line[i] && line != NULL)
+		{
+			newline[i] = line[i];
+			i++;
+		}
 	}
+	free (line);
 	return (newline);
 }
 
+/*
 int	check_line_end(char *buf)
 {
 	int	i;
@@ -62,3 +76,4 @@ char	*buf_to_line(char const *line, char const *buf)
 	newline[j] = '\0';
 	return (newline);
 }
+*/

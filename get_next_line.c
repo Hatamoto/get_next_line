@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:57:22 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/17 22:23:08 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/18 20:20:37 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,68 +15,53 @@
 char	*get_next_line(int fd)
 {
 	static char		remainder[BUFFER_SIZE]; //char ** to hold remainders? How do I free them if 
-							//	main does not read until EOF?
 	char 			buf[BUFFER_SIZE];
-	char 			*line; // malloc
+	char 			*line;
 	int				i;
+	int				j;
 	int				eol;
 	
 	i = 0;
 	line = NULL;
-	while (i < BUFFER_SIZE)
-	{
-		read(fd, buf, BUFFER_SIZE);
-		i++;
-	}
+	printf("remainder: %s\n", remainder);
 	eol = 0;
-	i = 0;
-	while (remainder[i] != '\0')
+	if (*remainder)
 	{
-		// first alloc needs to be here!
-		line[i] = remainder[i];
-		remainder[0] = '\0';
-	}	
-	while (eol == 0)
-	{
-		while (i < BUFFER_SIZE)
+		line = malloc(ft_strlen(remainder) + BUFFER_SIZE);
+		while (remainder[i] != '\0')
 		{
-			read(fd, buf, BUFFER_SIZE);
+			line[i] = remainder[i];
 			i++;
 		}
-		// line += malloc(BUFFER_SIZE);
-		i = 0;
+		remainder[0] = '\0';
+	}
+	j = 0;
+	while (eol == 0)
+	{
+		line = realloc_line(line, i);
+		read(fd, buf, BUFFER_SIZE);
 		while (buf[i] != '\0')
 		{
-			while (buf[i] != '\n')
-				line[i] = buf[i];
+			line[i] = buf[i];
+			i++;
 			if (buf[i] == '\n')
 			{
 				line[i] = buf[i];
-				line[i+1] = '\0';
+				line[i + 1] = '\0';
 				eol = 1;
+				j = -1;
 				while (buf[i] != '\0')
-				{
-					remainder* = buf[i];
-					remainder++;
-					i++;
-				}
+					remainder[j++] = buf[i++];
 			}
-			i++;
 		}
 	}
-	// If no newline, read again
+	return(line);
+}
+
+int	main(void)
+{
+	int	fd;
 	
-
-
-
-	line = buf_to_line(line, buf);
-	/*
-	while (found_eol == -1)
-	{
-		pos += read(fd, buf, 1); 
-		found_eol = check_line_end(buf);
-		if (found_eol == -1)
-			line = buf_to_line(line, buf);
-	}
-	*/
+	fd = open("testfile.txt", O_RDONLY);
+	printf("%s", get_next_line(fd));
 }
