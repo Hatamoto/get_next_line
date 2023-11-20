@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:57:22 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/18 20:20:37 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:45:14 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,24 @@
 
 char	*get_next_line(int fd)
 {
-	static char		remainder[BUFFER_SIZE]; //char ** to hold remainders? How do I free them if 
-	char 			buf[BUFFER_SIZE];
-	char 			*line;
-	int				i;
-	int				j;
-	int				eol;
-	
+	static char	remainder[BUFFER_SIZE + 1] = "\0";
+	char		buf[BUFFER_SIZE + 1];
+	char		*line;
+	int			i;
+	int			j;
+	int			eol;
+
+	// char			remchktemp[BUFFER_SIZE + 1];
 	i = 0;
 	line = NULL;
-	printf("remainder: %s\n", remainder);
+	// printf("remainder: %s\n", remainder);
 	eol = 0;
-	if (*remainder)
+	if (*remainder != '\0')
 	{
-		line = malloc(ft_strlen(remainder) + BUFFER_SIZE);
+		// If there is remainder from last read, alloc that to string.
+		line = malloc(ft_strlen(remainder) + BUFFER_SIZE + 1);
+		if (!line)
+			return (NULL);
 		while (remainder[i] != '\0')
 		{
 			line[i] = remainder[i];
@@ -38,30 +42,32 @@ char	*get_next_line(int fd)
 	j = 0;
 	while (eol == 0)
 	{
-		line = realloc_line(line, i);
+		// This SHOULD realloc the line every time there is need for more room...
+		line = realloc_line(line);
+		if (!line)
+			return (NULL);
 		read(fd, buf, BUFFER_SIZE);
-		while (buf[i] != '\0')
+		buf[BUFFER_SIZE] = '\0';
+		j = 0;
+		while (buf[j] != '\0')
 		{
-			line[i] = buf[i];
-			i++;
-			if (buf[i] == '\n')
+			if (!eol)
+				line[i++] = buf[j++];
+			else
 			{
-				line[i] = buf[i];
+				remainder[i++] = buf[j++];
+				// remchktemp[i] = buf[j];
+			}
+			if (buf[j] == '\n')
+			{
+				line[i] = buf[j];
 				line[i + 1] = '\0';
 				eol = 1;
-				j = -1;
-				while (buf[i] != '\0')
-					remainder[j++] = buf[i++];
+				j++;
+				i = 0;
 			}
 		}
+		remainder[j] = '\0';
 	}
-	return(line);
-}
-
-int	main(void)
-{
-	int	fd;
-	
-	fd = open("testfile.txt", O_RDONLY);
-	printf("%s", get_next_line(fd));
+	return (line);
 }

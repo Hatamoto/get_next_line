@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 16:29:16 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/20 13:30:17 by mburakow         ###   ########.fr       */
+/*   Created: 2023/11/20 14:35:47 by mburakow          #+#    #+#             */
+/*   Updated: 2023/11/20 15:59:00 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "get_next_line.h"
 
-# include <fcntl.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 8
-# endif
-
-char	*get_next_line(int fd);
-int		check_line_end(char *buf);
-char	*realloc_line(char *line);
-
-size_t	ft_strlen(const char *str);
-char	*init_bzero(char *s, size_t n);
-
-#endif
+int	main(int argc, char **argv)
+{
+	int	fd;
+	
+	if (argc == 2)
+	{
+		fd = open(argv[1], O_RDONLY);
+		printf("%s", get_next_line(fd));
+		printf("%s", get_next_line(fd));
+		printf("%s", get_next_line(fd));
+	}
+}

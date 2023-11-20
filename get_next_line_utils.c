@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/18 20:20:29 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:36:59 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,47 @@ size_t	ft_strlen(const char *str)
 		length++;
 	return (length);
 }
+/*
+char	*init_bzero(char *s, size_t n)
+{
+	size_t	i;
 
-char	*realloc_line(char *line, int rlen)
+	i = 0;
+	while (i < n)
+	{
+		s[i] = '\0';
+		i++;
+	}
+	return (s);
+}
+*/
+char	*realloc_line(char *line)
 {
 	char	*newline;
 	int		i;
 
 	i = 0;
+	newline = NULL;
 	if (line == NULL)
-		newline = malloc(BUFFER_SIZE);
+	{
+		newline = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+		if (!newline)
+			return (NULL);
+		return (newline);
+	}
 	else
-	{	
-		newline = malloc(rlen + BUFFER_SIZE + 1);
-		while (line[i] && line != NULL)
+	{
+		newline = (char *)malloc((ft_strlen(line) + BUFFER_SIZE + 1)
+				* sizeof(char));
+		if (!newline)
+			return (NULL);
+		while (line[i])
 		{
 			newline[i] = line[i];
 			i++;
 		}
 	}
-	free (line);
+	free(line);
 	return (newline);
 }
 
