@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:57:22 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/21 16:50:39 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/21 14:24:28 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,29 @@ char	*get_next_line(int fd)
 	int			eol;
 	int			chread;
 
-	char		remchktemp[BUFFER_SIZE + 1];
+	char			remchktemp[BUFFER_SIZE + 1];
 	
 	chread = 0;
 	i = 0;
 	line = NULL;
+	// printf("remainder: %s\n", remainder);
 	eol = 0;
+	if (*remainder != '\0')
+	{
+		line = malloc(ft_strlen(remainder) + BUFFER_SIZE + 1);
+		if (!line)
+			return (NULL);
+		while (remainder[i] != '\0')
+		{
+			line[i] = remainder[i];
+			i++;
+		}
+		remainder[0] = '\0';
+	}
 	j = 0;
 	while (eol == 0)
 	{
 		line = realloc_line(line);
-		while (remainder[i] != '\0')
-		{
-			line[i] = remainder[i];
-			shift_left(remainder);
-		}
 		if (!line)
 			return (NULL);
 		chread = read(fd, buf, BUFFER_SIZE);

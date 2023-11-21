@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/20 16:36:59 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/21 16:50:44 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,20 @@ size_t	ft_strlen(const char *str)
 		length++;
 	return (length);
 }
-/*
-char	*init_bzero(char *s, size_t n)
+
+char	*shift_left(char *remainder)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	while (i < n)
+	while (remainder[i] != '\0')
 	{
-		s[i] = '\0';
+		remainder[i] = remainder[i + 1];
 		i++;
 	}
-	return (s);
+	return (remainder)
 }
-*/
+
 char	*realloc_line(char *line)
 {
 	char	*newline;
