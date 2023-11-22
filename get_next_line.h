@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:29:16 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/20 13:30:17 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/22 22:47:53 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,15 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 8
 # endif
+# define FD_SIZE 4096;
 
 char	*get_next_line(int fd);
-int		check_line_end(char *buf);
-char	*realloc_line(char *line);
-
 size_t	ft_strlen(const char *str);
-char	*init_bzero(char *s, size_t n);
+char	*ft_shift_left(char *buffer, int offset);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strchr(const char *s, int c);
+int		ft_strcpos(const char *s, int c);
+char	*ft_substr(const char *s, unsigned int start, size_t len);
+char	*realloc_line(char *line);
 
 #endif

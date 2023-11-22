@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/21 16:50:44 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/22 23:19:04 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,99 @@ size_t	ft_strlen(const char *str)
 	return (length);
 }
 
-char	*shift_left(char *remainder)
+char	*ft_shift_left(char *buffer, int offset)
 {
 	int	i;
 
 	i = 0;
-	while (remainder[i] != '\0')
+	while (buffer[i + offset])
 	{
-		remainder[i] = remainder[i + 1];
+		buffer[i] = buffer[i + offset];
 		i++;
 	}
-	return (remainder)
+	buffer[i] = '\0';
+	return (buffer);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
+
+	if (!s1)
+	{
+		s1 = (char *)malloc(1 * sizeof(char));
+		s1[0] = '\0';
+	}
+	if (!s1 || !s2)
+		return (NULL);
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	i = -1;
+	j = 0;
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
+	while (s2[j] != '\0')
+		str[i++] = s2[j++];
+	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
+	free(s1);
+	return (str);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if (*s == (char)c)
+		return ((char *)s);
+	return (NULL);
+}
+
+int	ft_strcpos(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+char	*ft_substr(const char *s, unsigned int start, size_t len)
+{
+	char	*new;
+	size_t	slen;
+	size_t	i;
+
+	if (!s)
+		return (NULL);
+	slen = ft_strlen((char *)s);
+	if (start > slen)
+		len = 0;
+	else if (slen - start < len)
+		len = slen - start;
+	new = malloc(sizeof(char) * (len + 1));
+	if (!new)
+		return (NULL);
+	new[len] = '\0';
+	i = 0;
+	while (i < len && start < slen)
+	{
+		new[i] = s[start + i];
+		i++;
+	}
+	return (new);
 }
 
 char	*realloc_line(char *line)
