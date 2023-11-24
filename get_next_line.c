@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:57:22 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/24 16:05:26 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/24 17:10:28 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ char	*read_to_buf(int fd, char *buffer)
 
 	bts_read = 1;
 	line = NULL;
-	// Stuff in buffer but no newline
 	nl_index = ft_strcpos(buffer, '\n');
 	while (bts_read > 0 && nl_index == -1)
 	{
@@ -53,12 +52,10 @@ char	*read_to_buf(int fd, char *buffer)
 			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
 			return (NULL);
 		}
-		// Want any gum?
 		if (bts_read == 0)
-			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);		
+			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
 		nl_index = ft_strcpos(buffer, '\n');
 	}
-	// We encountered a newline, but what if there is none?
 	if (bts_read > 0 && nl_index > -1)
 	{
 		temp = ft_substr(buffer, 0, (nl_index + 1));
@@ -71,7 +68,7 @@ char	*read_to_buf(int fd, char *buffer)
 		free (temp);
 		if (line == NULL)
 		{
-			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);		
+			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
 			return (NULL);
 		}
 		buffer = ft_shift_left(buffer, (nl_index + 1));
@@ -88,18 +85,18 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (read(fd, 0, 0) < 0)
 	{
-		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);		
+		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
 		return (NULL);
 	}
 	line = read_to_buf(fd, buffer);
 	if (line == NULL)
 	{
-		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);		
+		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
 		return (NULL);
 	}
 	if (*line == '\0')
 	{
-		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);		
+		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
 		free (line);
 		return (NULL);
 	}
