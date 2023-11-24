@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:29:16 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/22 22:47:53 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/23 15:21:10 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_shift_left(char *buffer, int offset);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(const char *s, int c);
 int		ft_strcpos(const char *s, int c);
-char	*ft_substr(const char *s, unsigned int start, size_t len);
+char	*ft_substr(char *s, unsigned int start, size_t len);
 char	*realloc_line(char *line);
 
 #endif

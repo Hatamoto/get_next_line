@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/22 23:19:04 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/24 16:07:06 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,18 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!s1)
 	{
 		s1 = (char *)malloc(1 * sizeof(char));
-		s1[0] = '\0';
+		if (s1)
+			s1[0] = '\0';
 	}
 	if (!s1 || !s2)
 		return (NULL);
 	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
 	if (str == NULL)
+	{
+		if (s1)
+			free (s1);
 		return (NULL);
+	}
 	i = -1;
 	j = 0;
 	if (s1)
@@ -91,15 +96,15 @@ int	ft_strcpos(const char *s, int c)
 	return (-1);
 }
 
-char	*ft_substr(const char *s, unsigned int start, size_t len)
+char	*ft_substr(char *buffer, unsigned int start, size_t len)
 {
 	char	*new;
 	size_t	slen;
 	size_t	i;
 
-	if (!s)
+	if (!buffer)
 		return (NULL);
-	slen = ft_strlen((char *)s);
+	slen = ft_strlen((char *)buffer);
 	if (start > slen)
 		len = 0;
 	else if (slen - start < len)
@@ -111,7 +116,7 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	i = 0;
 	while (i < len && start < slen)
 	{
-		new[i] = s[start + i];
+		new[i] = buffer[start + i];
 		i++;
 	}
 	return (new);
