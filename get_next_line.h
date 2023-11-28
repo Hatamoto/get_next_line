@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 16:29:16 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/23 15:21:10 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:21:04 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 8
 # endif
-# define FD_SIZE 4096;
+
+# define FD_SIZE 4096
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *str);
