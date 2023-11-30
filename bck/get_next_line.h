@@ -26,7 +26,6 @@
 
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *str);
-void	*ft_memset(void *b, int c, size_t len);
 char	*ft_shift_left(char *buffer, int offset);
 char	*ft_strjoin(char *s1, char *s2);
 char	*ft_strchr(const char *s, int c);

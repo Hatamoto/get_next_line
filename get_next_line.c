@@ -11,94 +11,108 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-void	*ft_memset(void *b, int c, size_t len)
+char	*ft_read_to_buffer(int fd, char *buffer)
 {
-	size_t			i;
-	unsigned char	*mem;
-	unsigned char	d;
-
-	i = 0;
-	d = (unsigned char)c;
-	mem = (unsigned char *)b;
-	while (i < len)
-	{
-		mem[i] = d;
-		i++;
-	}
-	return (b);
-}
-
-char	*read_to_buf(int fd, char *buffer)
-{
-	int		bts_read;
-	char	*line;
-	int		nl_index;
-	char	*temp;
-
+	int			bts_read;
+	char		*raw_line;
+	
+	raw_line = (char *)malloc((sizeof(char) * BUFFER_SIZE + 1));
+	if (!raw_line)
+		return (NULL);
 	bts_read = 1;
-	line = NULL;
-	nl_index = ft_strcpos(buffer, '\n');
-	while (bts_read > 0 && nl_index == -1)
+	while (bts_read > 0 && ft_strchr(buffer, '\n') == NULL)
 	{
-		line = ft_strjoin(line, buffer);
-		if (!line)
-			return (NULL);
-		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
-		bts_read = read(fd, buffer, BUFFER_SIZE);
+		bts_read = read(fd, raw_line, BUFFER_SIZE);
 		if (bts_read == -1)
 		{
-			free(line);
-			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
+			free(raw_line);
+			free(buffer);
 			return (NULL);
 		}
-		if (bts_read == 0)
-			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
-		nl_index = ft_strcpos(buffer, '\n');
+		raw_line[bts_read] = '\0';
+		buffer = ft_strjoin(buffer, raw_line);
 	}
-	if (bts_read > 0 && nl_index > -1)
+	free(raw_line);
+	return (buffer);
+}
+
+char	*ft_new_line(char *buffer)
+{
+	char	*new_line;
+	int		i;
+
+	i = 0;
+	if(!buffer[i])
+		return (NULL);
+	while (buffer[i] != '\0' && buffer[i] != '\n')
+		i++;
+	if (buffer[i] == '\n')
+		i++;
+	new_line = (char *)malloc(sizeof(char) * (i + 1));
+	if (!new_line)
+		return (NULL);
+	i = 0;
+	while (buffer[i] != '\0' && buffer[i] != '\n')
 	{
-		temp = ft_substr(buffer, 0, (nl_index + 1));
-		if (!temp)
-		{
-			free(line);
-			return (NULL);
-		}
-		line = ft_strjoin(line, temp);
-		free (temp);
-		if (line == NULL)
-		{
-			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
-			return (NULL);
-		}
-		buffer = ft_shift_left(buffer, (nl_index + 1));
+		new_line[i] = buffer[i];
+		i++;
 	}
-	return (line);
+	if (buffer[i] == '\n')
+	{
+		new_line[i] = buffer[i];
+		i++;
+	}
+	new_line[i] = '\0';
+	return (new_line);
+}
+
+char	*ft_new_buffer(char *buffer)
+{
+	int		i;
+	int		j;
+	char	*new_buffer;
+
+	i = 0;
+	j = 0;
+	while (buffer[i] != '\0' && buffer[i] != '\n')
+		i++;
+	if(buffer[i] == '\0')
+	{
+		free (buffer);
+		return (NULL);
+	}
+	new_buffer = (char *)malloc(sizeof(char) * (ft_strlen(buffer) - i + 1));
+	if (!new_buffer)
+		return (NULL);
+	i++;
+	while (buffer[i] != '\0')
+		new_buffer[j++] = buffer[i++];
+	new_buffer[j] = '\0';
+	free (buffer);
+	return (new_buffer); 
 }
 
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	buffer[BUFFER_SIZE + 1];
+	static char	*buffer;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
-	if (read(fd, 0, 0) < 0)
+	// Because this can happen after the first call
+	if (read(fd, 0 ,0) < 0)
 	{
-		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
+		if (buffer)
+			free (buffer);
+			// ft_memset(buffer, 0, ft_strlen(buffer));
 		return (NULL);
 	}
-	line = read_to_buf(fd, buffer);
-	if (line == NULL)
-	{
-		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
+	buffer = ft_read_to_buffer(fd, buffer);
+	if (!buffer)
 		return (NULL);
-	}
-	if (*line == '\0')
-	{
-		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
-		free (line);
-		return (NULL);
-	}
+	line = ft_new_line(buffer);
+	buffer = ft_new_buffer(buffer);
 	return (line);
 }

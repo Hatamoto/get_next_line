@@ -4,3 +4,5 @@
 a.out.dSYM/*
 *.a
 *.txt
+.DS_Store
+.vscode/*

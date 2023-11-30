@@ -22,23 +22,6 @@ size_t	ft_strlen(const char *str)
 	return (length);
 }
 
-void	*ft_memset(void *b, int c, size_t len)
-{
-	size_t			i;
-	unsigned char	*mem;
-	unsigned char	d;
-
-	i = 0;
-	d = (unsigned char)c;
-	mem = (unsigned char *)b;
-	while (i < len)
-	{
-		mem[i] = d;
-		i++;
-	}
-	return (b);
-}
-
 char	*ft_shift_left(char *buffer, int offset)
 {
 	int	i;
@@ -88,8 +71,6 @@ char	*ft_strjoin(char *s1, char *s2)
 
 char	*ft_strchr(const char *s, int c)
 {
-	if (!s)
-		return (NULL);
 	while (*s)
 	{
 		if (*s == (char)c)
