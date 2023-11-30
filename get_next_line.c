@@ -110,8 +110,10 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	buffer = ft_read_to_buffer(fd, buffer);
+	/*
 	if (!buffer)
 		return (NULL);
+	*/
 	line = ft_new_line(buffer);
 	buffer = ft_new_buffer(buffer);
 	return (line);
