@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/12/01 02:38:54 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/12/01 01:46:32 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,12 @@ size_t	ft_strlen(const char *str)
 	return (length);
 }
 
-char	*ft_shift_left(char *buffer, int offset)
-{
-	int	i;
-
-	i = 0;
-	while (buffer[i + offset])
-	{
-		buffer[i] = buffer[i + offset];
-		i++;
-	}
-	buffer[i] = '\0';
-	return (buffer);
-}
-
 char	*ft_strjoin(char *s1, char *s2)
 {
 	size_t	i;
 	size_t	j;
 	char	*str;
-
+	
 	if (!s1)
 	{
 		s1 = (char *)malloc(1 * sizeof(char));
@@ -69,21 +55,21 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (str);
 }
 
-int	ft_strcpos(const char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
-	int	i;
-
-	i = 0;
-	while (s[i])
+	if (!s)
+		return (NULL);
+	while (*s)
 	{
-		if (s[i] == (char)c)
-			return (i);
-		i++;
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
 	}
-	return (-1);
+	if (*s == (char)c)
+		return ((char *)s);
+	return (NULL);
 }
 
-/*
 char	*ft_substr(char *buffer, unsigned int start, size_t len)
 {
 	char	*new;
@@ -108,6 +94,39 @@ char	*ft_substr(char *buffer, unsigned int start, size_t len)
 		i++;
 	}
 	return (new);
+}
+
+/*
+void	*ft_calloc(size_t count, size_t size)
+{
+	void	*objs;
+	size_t	magic_number;
+
+	magic_number = 0 - 1;
+	if (count && size && count > (magic_number / size))
+		return (NULL);
+	objs = malloc(size * count);
+	if (objs == NULL)
+		return (NULL);
+	ft_bzero(objs, size * count);
+	return (objs);
+}
+
+void	*ft_memset(void *b, int c, size_t len)
+{
+	size_t			i;
+	unsigned char	*mem;
+	unsigned char	d;
+
+	i = 0;
+	d = (unsigned char)c;
+	mem = (unsigned char *)b;
+	while (i < len)
+	{
+		mem[i] = d;
+		i++;
+	}
+	return (b);
 }
 
 char	*realloc_line(char *line)
@@ -138,6 +157,34 @@ char	*realloc_line(char *line)
 	}
 	free(line);
 	return (newline);
+}
+
+int	ft_strcpos(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (char)c)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+char	*ft_shift_left(char *buffer, int offset)
+{
+	int	i;
+
+	i = 0;
+	while (buffer[i + offset])
+	{
+		buffer[i] = buffer[i + offset];
+		i++;
+	}
+	buffer[i] = '\0';
+	return (buffer);
 }
 
 int	check_line_end(char *buf)

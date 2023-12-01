@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/12/01 02:38:54 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/11/24 16:07:06 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,19 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (str);
 }
 
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if (*s == (char)c)
+		return ((char *)s);
+	return (NULL);
+}
+
 int	ft_strcpos(const char *s, int c)
 {
 	int	i;
@@ -83,7 +96,6 @@ int	ft_strcpos(const char *s, int c)
 	return (-1);
 }
 
-/*
 char	*ft_substr(char *buffer, unsigned int start, size_t len)
 {
 	char	*new;
@@ -140,6 +152,7 @@ char	*realloc_line(char *line)
 	return (newline);
 }
 
+/*
 int	check_line_end(char *buf)
 {
 	int	i;

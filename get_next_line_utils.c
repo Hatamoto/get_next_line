@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/24 16:07:06 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/12/01 03:04:45 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,41 +22,28 @@ size_t	ft_strlen(const char *str)
 	return (length);
 }
 
-void	*ft_memset(void *b, int c, size_t len)
+static char	*ft_join_strs(char *s1, char *s2)
 {
-	size_t			i;
-	unsigned char	*mem;
-	unsigned char	d;
+	char	*str;
+	size_t	i;
+	size_t	j;
 
-	i = 0;
-	d = (unsigned char)c;
-	mem = (unsigned char *)b;
-	while (i < len)
-	{
-		mem[i] = d;
-		i++;
-	}
-	return (b);
-}
-
-char	*ft_shift_left(char *buffer, int offset)
-{
-	int	i;
-
-	i = 0;
-	while (buffer[i + offset])
-	{
-		buffer[i] = buffer[i + offset];
-		i++;
-	}
-	buffer[i] = '\0';
-	return (buffer);
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (str == NULL)
+		return (NULL);
+	i = -1;
+	j = 0;
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
+	while (s2[j] != '\0')
+		str[i++] = s2[j++];
+	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
+	return (str);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
 {
-	size_t	i;
-	size_t	j;
 	char	*str;
 
 	if (!s1)
@@ -67,38 +54,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	if (!s1 || !s2)
 		return (NULL);
-	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (str == NULL)
-	{
-		if (s1)
-			free (s1);
-		return (NULL);
-	}
-	i = -1;
-	j = 0;
-	if (s1)
-		while (s1[++i] != '\0')
-			str[i] = s1[i];
-	while (s2[j] != '\0')
-		str[i++] = s2[j++];
-	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
+	str = ft_join_strs(s1, s2);
 	free(s1);
 	return (str);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	if (!s)
-		return (NULL);
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	if (*s == (char)c)
-		return ((char *)s);
-	return (NULL);
 }
 
 int	ft_strcpos(const char *s, int c)
@@ -140,7 +98,7 @@ char	*ft_substr(char *buffer, unsigned int start, size_t len)
 	}
 	return (new);
 }
-
+/*
 char	*realloc_line(char *line)
 {
 	char	*newline;
@@ -171,7 +129,6 @@ char	*realloc_line(char *line)
 	return (newline);
 }
 
-/*
 int	check_line_end(char *buf)
 {
 	int	i;

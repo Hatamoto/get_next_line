@@ -6,115 +6,114 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 15:57:22 by mburakow          #+#    #+#             */
-/*   Updated: 2023/11/24 18:06:30 by mburakow         ###   ########.fr       */
+/*   Updated: 2023/12/01 03:08:28 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
-char	*ft_read_to_buffer(int fd, char *buffer)
+void	*ft_memset(void *b, int c, size_t len)
 {
-	int			bts_read;
-	char		*raw_line;
-	
-	raw_line = (char *)malloc((sizeof(char) * BUFFER_SIZE + 1));
-	if (!raw_line)
-		return (NULL);
-	bts_read = 1;
-	while (bts_read > 0 && ft_strchr(buffer, '\n') == NULL)
+	size_t			i;
+	unsigned char	*mem;
+	unsigned char	d;
+
+	i = 0;
+	d = (unsigned char)c;
+	mem = (unsigned char *)b;
+	while (i < len)
 	{
-		bts_read = read(fd, raw_line, BUFFER_SIZE);
-		if (bts_read == -1)
-		{
-			free(raw_line);
-			free(buffer);
-			return (NULL);
-		}
-		raw_line[bts_read] = '\0';
-		buffer = ft_strjoin(buffer, raw_line);
+		mem[i] = d;
+		i++;
 	}
-	free(raw_line);
+	return (b);
+}
+
+static char	*ft_shift_left(char *buffer, int offset)
+{
+	int	i;
+
+	i = 0;
+	while (buffer[i + offset])
+	{
+		buffer[i] = buffer[i + offset];
+		i++;
+	}
+	buffer[i] = '\0';
 	return (buffer);
 }
 
-char	*ft_new_line(char *buffer)
+char	*nl_shift_buf(char *buffer, char *line, int nl_index)
 {
-	char	*new_line;
-	int		i;
+	char	*temp;	
 
-	i = 0;
-	if(!buffer[i])
-		return (NULL);
-	while (buffer[i] != '\0' && buffer[i] != '\n')
-		i++;
-	if (buffer[i] == '\n')
-		i++;
-	new_line = (char *)malloc(sizeof(char) * (i + 1));
-	if (!new_line)
-		return (NULL);
-	i = 0;
-	while (buffer[i] != '\0' && buffer[i] != '\n')
+	temp = ft_substr(buffer, 0, (nl_index + 1));
+	if (!temp)
 	{
-		new_line[i] = buffer[i];
-		i++;
+		free(line);
+		return (NULL);
 	}
-	if (buffer[i] == '\n')
+	line = ft_strjoin(line, temp);
+	free (temp);
+	if (line == NULL)
 	{
-		new_line[i] = buffer[i];
-		i++;
+		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
+		return (NULL);
 	}
-	new_line[i] = '\0';
-	return (new_line);
+	buffer = ft_shift_left(buffer, (nl_index + 1));
+	return (line);
 }
 
-char	*ft_new_buffer(char *buffer)
+char	*read_to_buf(int fd, char *buffer)
 {
-	int		i;
-	int		j;
-	char	*new_buffer;
+	int		bts_read;
+	char	*line;
+	int		nl_index;
 
-	i = 0;
-	j = 0;
-	while (buffer[i] != '\0' && buffer[i] != '\n')
-		i++;
-	if(buffer[i] == '\0')
+	bts_read = 1;
+	line = NULL;
+	nl_index = ft_strcpos(buffer, '\n');
+	while (bts_read > 0 && nl_index == -1)
 	{
-		free (buffer);
-		return (NULL);
+		line = ft_strjoin(line, buffer);
+		if (!line)
+			return (NULL);
+		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
+		bts_read = read(fd, buffer, BUFFER_SIZE);
+		if (bts_read == -1)
+			return (free(line), NULL);
+		if (bts_read == 0)
+			ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
+		nl_index = ft_strcpos(buffer, '\n');
 	}
-	new_buffer = (char *)malloc(sizeof(char) * (ft_strlen(buffer) - i + 1));
-	if (!new_buffer)
-		return (NULL);
-	i++;
-	while (buffer[i] != '\0')
-		new_buffer[j++] = buffer[i++];
-	new_buffer[j] = '\0';
-	free (buffer);
-	return (new_buffer); 
+	if (bts_read > 0 && nl_index > -1)
+		return (nl_shift_buf(buffer, line, nl_index));
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*buffer;
+	static char	buffer[BUFFER_SIZE + 1];
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
-	// Because this can happen after the first call
-	if (read(fd, 0 ,0) < 0)
+	if (read(fd, 0, 0) < 0)
 	{
-		if (buffer)
-			free (buffer);
-			// ft_memset(buffer, 0, ft_strlen(buffer));
+		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
 		return (NULL);
 	}
-	buffer = ft_read_to_buffer(fd, buffer);
-	/*
-	if (!buffer)
+	line = read_to_buf(fd, buffer);
+	if (line == NULL)
+	{
+		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
 		return (NULL);
-	*/
-	line = ft_new_line(buffer);
-	buffer = ft_new_buffer(buffer);
+	}
+	if (*line == '\0')
+	{
+		ft_memset(buffer, 0, (size_t)BUFFER_SIZE + 1);
+		free (line);
+		return (NULL);
+	}
 	return (line);
 }
