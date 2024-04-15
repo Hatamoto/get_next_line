@@ -6,7 +6,7 @@
 /*   By: mburakow <mburakow@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 18:02:05 by mburakow          #+#    #+#             */
-/*   Updated: 2023/12/01 03:04:45 by mburakow         ###   ########.fr       */
+/*   Updated: 2024/04/15 21:17:46 by mburakow         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,67 +98,4 @@ char	*ft_substr(char *buffer, unsigned int start, size_t len)
 	}
 	return (new);
 }
-/*
-char	*realloc_line(char *line)
-{
-	char	*newline;
-	int		i;
 
-	i = 0;
-	newline = NULL;
-	if (line == NULL)
-	{
-		newline = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-		if (!newline)
-			return (NULL);
-		return (newline);
-	}
-	else
-	{
-		newline = (char *)malloc((ft_strlen(line) + BUFFER_SIZE + 1)
-				* sizeof(char));
-		if (!newline)
-			return (NULL);
-		while (line[i])
-		{
-			newline[i] = line[i];
-			i++;
-		}
-	}
-	free(line);
-	return (newline);
-}
-
-int	check_line_end(char *buf)
-{
-	int	i;
-
-	i = 0;
-	while (i < BUFFER_SIZE)
-	{
-		if (buf[i] == '\n')
-			return (i);
-	}
-	return (-1);
-}
-
-char	*buf_to_line(char const *line, char const *buf)
-{
-	int		i;
-	int		j;
-	char	*newline;
-
-	newline = (char *)malloc((ft_strlen(line) + ft_strlen(buf)) + 1);
-	if (newline == 0)
-		return (-2); // some error handling?
-	i = 0;
-	j = 0;
-	while (line[i] != '\0')
-		newline[j++] = line[i++];
-	i = 0;
-	while (buf[i] != '\0')
-		newline[j++] = buf[i++];
-	newline[j] = '\0';
-	return (newline);
-}
-*/
