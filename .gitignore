@@ -6,3 +6,5 @@ a.out.dSYM/*
 *.txt
 .DS_Store
 .vscode/*
+/testfile
+
